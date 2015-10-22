@@ -12,8 +12,8 @@ export default class ApplicationController {
         this.render(routes.homePage.view);
     }
 
-    render(page) {
-        this.response.writeHead(200, { 'Content-Type': 'text/html' });
+    render(page, statusCode = 200) {
+        this.response.writeHead(statusCode, { 'Content-Type': 'text/html' });
         this.response.write(fs.readFileSync(page));
         this.response.end();
     }

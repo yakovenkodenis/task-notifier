@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "description": "The pure node.js app for creating tasks and notifications.",
   "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yakovenkodenis/task-notifier.git"
+  },
+  "dependencies": {
+    "mongodb": "~2.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -15,4 +15,9 @@ export default {
         view: 'views/markup/main.html'
     },
 
+    page404: {
+        url: null,
+        view: 'views/markup/404.html'
+    }
+
 };
