@@ -1,7 +1,7 @@
 {
   "name": "notificator",
   "version": "1.0.0",
-  "description": "The pure node.js app for creating tasks and notifications.",
+  "description": "The pure node.js and mongodb app for creating tasks and notifications.",
   "main": "app.js",
   "repository": {
     "type": "git",
