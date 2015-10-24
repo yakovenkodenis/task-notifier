@@ -6,11 +6,16 @@ import mainController from './controllers/mainController';
 import errorController from './controllers/errorController';
 import routes from './routes/routes';
 
+import { Logger as logger } from './helpers/utils.js';
+
 const port = 9000;
+let Logger = new logger();
 
 http.createServer( (request, response) => {
 
-    // Import controllers
+    Logger.log(request.method, request.socket.remoteAddress, request.url);
+
+    // Initialize controllers
     const AppController = new applicationController(request, response);
     const MainController = new mainController(request, response);
     const ErrorController = new errorController(request, response);
