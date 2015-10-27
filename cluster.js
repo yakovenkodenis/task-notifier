@@ -1,6 +1,11 @@
 import cluster from 'cluster';
+import { Logger as logger } from './helpers/utils.js';
+
+let Logger = new logger();
 
 if(cluster.isMaster) {
+
+    Logger.log('Muster cluster is up and running');
 
     const cpuCount = require('os').cpus().length;
 
@@ -13,4 +18,6 @@ if(cluster.isMaster) {
     })
 } else {
     require('./app');
+
+    Logger.log('Slave cluster is up and running');
 }
