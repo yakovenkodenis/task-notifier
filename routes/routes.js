@@ -5,11 +5,6 @@ export default {
         view: 'views/markup/index.html'
     },
 
-    calc: {
-        url: '/calc',
-        view: null
-    },
-
     mainPage: {
         url: '/profile',
         view: 'views/markup/main.html'
@@ -23,6 +18,11 @@ export default {
     authPage: {
         url: '/auth',
         view: 'views/markup/auth.html'
+    },
+
+    signupPage: {
+        url: '/signup',
+        view: 'views/markup/signup.html'
     },
 
     mongoDB: {

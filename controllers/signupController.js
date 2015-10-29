@@ -1,6 +1,7 @@
 import { MongoClient } from 'mongodb';
 import { format } from 'util';
 import qs from 'querystring';
+import fs from 'fs';
 
 import { MD5 } from '../helpers/utils.js';
 import ApplicationController from './applicationController';
@@ -12,16 +13,15 @@ import errors from '../helpers/errors.js';
 
 export default class AuthController extends ApplicationController {
 
-    getAuthPage() {
-        const path = routes.authPage.view;
+    getSignupPage(formData) {
+        const path = routes.signupPage.view;
         let view = fs.readFileSync(path, 'utf-8');
         let processedView = TemplateEngine(view, {});
         this.render(processedView);
-        this.render(path);
     }
 
     attemptLogin() {
-        
+
     }
 
     queryDB(User) {

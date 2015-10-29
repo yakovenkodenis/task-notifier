@@ -1,6 +1,7 @@
 import { MongoClient } from 'mongodb';
 import { format } from 'util';
 import qs from 'querystring';
+import fs from 'fs';
 import child_process from 'child_process';
 
 import { MD5 } from '../helpers/utils.js';
@@ -18,7 +19,6 @@ export default class AuthController extends ApplicationController {
         let view = fs.readFileSync(path, 'utf-8');
         let processedView = TemplateEngine(view, {});
         this.render(processedView);
-        this.render(path);
     }
 
     login(post) {

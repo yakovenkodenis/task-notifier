@@ -1,9 +1,11 @@
 import http from 'http';
+import qs from 'querystring';
 
 import applicationController from './controllers/applicationController';
 import mainController from './controllers/mainController';
 import errorController from './controllers/errorController';
 import authController from './controllers/authController';
+import signupController from './controllers/signupController';
 import routes from './routes/routes';
 
 import { Logger as logger } from './helpers/utils';
@@ -21,6 +23,7 @@ http.createServer( (request, response) => {
     const MainController = new mainController(request, response);
     const ErrorController = new errorController(request, response);
     const AuthController = new authController(request, response);
+    const SignupController = new signupController(request, response);
 
     switch (request.method) {
 
@@ -38,6 +41,10 @@ http.createServer( (request, response) => {
                 AuthController.getAuthPage();
             }
 
+            else if (request.url === routes.signupPage.url) {
+                SignupController.getSignupPage();
+            }
+
             else {
                 ErrorController.get404Page();
             }
@@ -52,9 +59,31 @@ http.createServer( (request, response) => {
                 });
             }
 
-        default:
-            ErrorController.get405Page();
-            break;
+            else if (request.url === routes.signupPage.url) {
+                let reqBody = '';
+                request.on('data', (data) => {
+                    reqBody += data;
+                    if (reqBody.length > 1e7) { // 10mb
+                        response.writeHead(413, 'Request Entity Too Large',
+                            { 'Content-Type': 'text/html'});
+                        response.write('Too large data. Server cannot handle this.');
+                        response.end();
+                    }
+                });
+                request.on('end', (data) => {
+                    let formData = qs.parse(reqBody);
+                    console.log(formData);
+                    SignupController.getSignupPage(formData);
+                });
+            }
+
+            else {
+                ErrorController.get404Page();
+            }
+
+        // default:
+        //     ErrorController.get405Page();
+        //     break;
 
     }
 
