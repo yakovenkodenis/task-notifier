@@ -4,7 +4,7 @@ import qs from 'querystring';
 import fs from 'fs';
 import child_process from 'child_process';
 
-import { MD5 } from '../helpers/utils.js';
+import { Generator } from '../helpers/utils.js';
 import ApplicationController from './applicationController';
 import TemplateEngine from '../helpers/templateEngine';
 import User from '../models/user';
@@ -32,7 +32,7 @@ export default class AuthController extends ApplicationController {
             users.findOne(
                 {
                     email: email,
-                    password: new MD5().encode(password)
+                    password: new Generator().encodeMD5(password)
                 }, (err, user) => {
                     if (err) throw err;
 

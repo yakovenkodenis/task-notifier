@@ -3,7 +3,7 @@ import { format } from 'util';
 import qs from 'querystring';
 import fs from 'fs';
 
-import { MD5 } from '../helpers/utils.js';
+import { Generator } from '../helpers/utils.js';
 import ApplicationController from './applicationController';
 import TemplateEngine from '../helpers/templateEngine';
 import User from '../models/user';
