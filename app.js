@@ -1,12 +1,13 @@
-import qs from 'querystring';
 import http from 'http';
 
 import applicationController from './controllers/applicationController';
 import mainController from './controllers/mainController';
 import errorController from './controllers/errorController';
+import authController from './controllers/authController';
 import routes from './routes/routes';
 
-import { Logger as logger } from './helpers/utils.js';
+import { Logger as logger } from './helpers/utils';
+
 
 const port = 9000;
 let Logger = new logger();
@@ -19,6 +20,7 @@ http.createServer( (request, response) => {
     const AppController = new applicationController(request, response);
     const MainController = new mainController(request, response);
     const ErrorController = new errorController(request, response);
+    const AuthController = new authController(request, response);
 
     switch (request.method) {
 
@@ -32,6 +34,10 @@ http.createServer( (request, response) => {
                 MainController.getMainPage();
             }
 
+            else if (request.url === routes.authPage.url) {
+                AuthController.getAuthPage();
+            }
+
             else {
                 ErrorController.get404Page();
             }
@@ -39,7 +45,12 @@ http.createServer( (request, response) => {
             break;
 
         case 'POST':
-            break;
+            if (request.url === '/login') {
+                AuthController.processPost(request, response, () => {
+                    response.writeHead(200, 'OK', {'Content-Type': 'text/plain'});
+                    response.end();
+                });
+            }
 
         default:
             ErrorController.get405Page();
