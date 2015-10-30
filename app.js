@@ -60,21 +60,7 @@ http.createServer( (request, response) => {
             }
 
             else if (request.url === routes.signupPage.url) {
-                let reqBody = '';
-                request.on('data', (data) => {
-                    reqBody += data;
-                    if (reqBody.length > 1e7) { // 10mb
-                        response.writeHead(413, 'Request Entity Too Large',
-                            { 'Content-Type': 'text/html'});
-                        response.write('Too large data. Server cannot handle this.');
-                        response.end();
-                    }
-                });
-                request.on('end', (data) => {
-                    let formData = qs.parse(reqBody);
-                    console.log(formData);
-                    SignupController.getSignupPage(formData);
-                });
+                SignupController.attemptSignup();
             }
 
             else {

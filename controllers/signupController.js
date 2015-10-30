@@ -11,17 +11,68 @@ import routes from '../routes/routes';
 import errors from '../helpers/errors.js';
 
 
-export default class AuthController extends ApplicationController {
+export default class SignupController extends ApplicationController {
 
     getSignupPage(formData) {
         const path = routes.signupPage.view;
         let view = fs.readFileSync(path, 'utf-8');
-        let processedView = TemplateEngine(view, {});
+        let processedView = TemplateEngine(view, { data: formData });
         this.render(processedView);
     }
 
-    attemptLogin() {
+    attemptSignup() {
+        let reqBody = '';
+        this.request.on('data', (data) => {
+            reqBody += data;
+            if (reqBody.length > 1e7) { // 10mb
+                this.response.writeHead(413, 'Request Entity Too Large',
+                    { 'Content-Type': 'text/html'});
+                this.response.write('Too large data. Server cannot handle this.');
+                this.response.end();
+            }
+        });
+        this.request.on('end', (data) => {
+            let formData = qs.parse(reqBody);
+            formData["requestResult"] = this.checkIfUserExists(formData);
+            console.log(formData);
+            this.getSignupPage(formData);
+        });
+    }
 
+    checkIfUserExists(formData) {
+        if(!formData) return false;
+
+        let validationErrors = this.getValidationErrors(formData);
+        if(validationErrors) {
+            return {
+                error: validationErrors.messages
+            }
+        }
+
+        let name = formData.name;
+        let email = formData.email;
+        let password = new Generator().encodeMD5(formData.password);
+
+        return true;
+    }
+
+    getValidationErrors(formData) {
+        let messages = [];
+
+        if (!formData.name)
+            messages.push(`${errors.noNameField}`);
+        if (!formData.email)
+            messages.push(`${errors.noEmailField}`);
+        if (!formData.password)
+            messages.push(`${errors.noPasswordField}`);
+
+        if (messages.length === 0) return { messages: undefined }
+        else {
+            messages.unshift(`${errors.authErrorHeader}:`);
+            return {
+                messages: messages
+            }
+        }
     }
 
     queryDB(User) {
