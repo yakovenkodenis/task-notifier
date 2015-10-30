@@ -10,5 +10,12 @@ const noEmailField = 'Email field is required';
 
 const noPasswordField = 'Password is required';
 
+const emailValidationFail = 'The email is not valid';
+
+const passwordValidationFail = 'Password must have more than 5 symbols';
+
+const nameValidationFail = 'Name is too short (4 symbols minimum)'
+
 export default { loginError, registerError, authErrorHeader, noNameField,
-                 noEmailField, noPasswordField }
+                 noEmailField, noPasswordField, emailValidationFail,
+                 passwordValidationFail, nameValidationFail }

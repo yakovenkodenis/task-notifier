@@ -61,10 +61,24 @@ export default class SignupController extends ApplicationController {
 
         if (!formData.name)
             messages.push(`${errors.noNameField}`);
+        if (formData.name && formData.name.length < 4) {
+            messages.push(`${errors.nameValidationFail}`);
+        }
+
         if (!formData.email)
             messages.push(`${errors.noEmailField}`);
+
+        const emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+        if (formData.email && !emailRegex.test(formData.email)) {
+            messages.push(`${errors.emailValidationFail}`);
+        }
+
         if (!formData.password)
             messages.push(`${errors.noPasswordField}`);
+
+        if (formData.password && formData.password.length < 6) {
+            messages.push(`${errors.passwordValidationFail}`);
+        }
 
         if (messages.length === 0) return { messages: undefined }
         else {
