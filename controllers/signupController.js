@@ -5,6 +5,7 @@ import fs from 'fs';
 
 import { Generator } from '../helpers/utils.js';
 import ApplicationController from './applicationController';
+import MainController from './mainController';
 import TemplateEngine from '../helpers/templateEngine';
 import User from '../models/user';
 import routes from '../routes/routes';
@@ -31,17 +32,38 @@ export default class SignupController extends ApplicationController {
                 this.response.end();
             }
         });
-        this.request.on('end', async(data) => {
+        this.request.on('end', async (data) => {
             let formData = qs.parse(reqBody);
             formData["requestResult"] = await this.validateUserInput(formData);
-            console.log(formData);
+            // console.log(formData);
             if (formData.requestResult.error) { // validations fails
                 this.getSignupPage(formData);
             } else { // check for credentials in the db
+                await this.registerNewUser(formData);
                 console.log('good to go');
-                this.getSignupPage(formData);
+                new MainController(this.request, this.response).getMainPage();
             }
         });
+    }
+
+    async registerNewUser(formData) {
+        let db = await MongoClient.connect('mongodb://127.0.0.1:27017/notificator');
+        try {
+            let collection = db.collection('users');
+
+            let name = formData.name;
+            let email = formData.email;
+            let password = new Generator().encodeMD5(formData.password);
+
+            let user = new User(email, name, password);
+
+            let userCount = await collection.save(user.serialize,
+                { writeConcern: { w: "majority", wtimeout: 5000 }});
+            console.log("REGISTRATION\n", userCount);
+            return userCount > 0;
+        } finally {
+            db.close();
+        }
     }
 
     async validateUserInput(formData) {
