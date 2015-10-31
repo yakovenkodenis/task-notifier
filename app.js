@@ -10,7 +10,6 @@ import routes from './routes/routes';
 
 import { Logger as logger } from './helpers/utils';
 
-
 const port = 9000;
 let Logger = new logger();
 

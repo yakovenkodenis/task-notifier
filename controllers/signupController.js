@@ -31,32 +31,40 @@ export default class SignupController extends ApplicationController {
                 this.response.end();
             }
         });
-        this.request.on('end', (data) => {
+        this.request.on('end', async(data) => {
             let formData = qs.parse(reqBody);
-            formData["requestResult"] = this.checkIfUserExists(formData);
+            formData["requestResult"] = await this.validateUserInput(formData);
             console.log(formData);
-            this.getSignupPage(formData);
+            if (formData.requestResult.error) { // validations fails
+                this.getSignupPage(formData);
+            } else { // check for credentials in the db
+                console.log('good to go');
+                this.getSignupPage(formData);
+            }
         });
     }
 
-    checkIfUserExists(formData) {
+    async validateUserInput(formData) {
         if(!formData) return false;
 
-        let validationErrors = this.getValidationErrors(formData);
+        let validationErrors = await this.getValidationErrors(formData);
+        console.log("HGSADGSadg\n");
+        console.log(validationErrors);
         if(validationErrors) {
             return {
                 error: validationErrors.messages
             }
         }
-
-        let name = formData.name;
-        let email = formData.email;
-        let password = new Generator().encodeMD5(formData.password);
-
         return true;
     }
 
-    getValidationErrors(formData) {
+    checkIfUserExists(formData) {
+        let name = formData.name;
+        let email = formData.email;
+        let password = new Generator().encodeMD5(formData.password);
+    }
+
+    async getValidationErrors(formData) {
         let messages = [];
 
         if (!formData.name)
@@ -80,6 +88,12 @@ export default class SignupController extends ApplicationController {
             messages.push(`${errors.passwordValidationFail}`);
         }
 
+        let userExists = await this.userExistsInDB(formData.email);
+        if(formData.email && userExists) {
+            console.log("USERRRR:\n", userExists);
+            messages.push(`${errors.userExists}`);
+        }
+
         if (messages.length === 0) return { messages: undefined }
         else {
             messages.unshift(`${errors.authErrorHeader}:`);
@@ -89,56 +103,14 @@ export default class SignupController extends ApplicationController {
         }
     }
 
-    queryDB(User) {
-
-        MongoClient.connect('mongodb://127.0.0.1:27017/notificator', (err, db) => {
-            if (err) throw err;
-
+    async userExistsInDB(email) {
+        let db = await MongoClient.connect('mongodb://127.0.0.1:27017/notificator');
+        try {
             let collection = db.collection('users');
-            collection.insert({ name: 'Denis Yakovenko',
-                                email: 'yakovenko.denis.a@gmail.com',
-                                password: 'hello' });
-
-            collection.count((err, count) => {
-                console.log(format('count = %s', count));
-            });
-
-            collection.find().toArray((err, results) => {
-                console.dir(results);
-
-                db.close();
-            });
-        });
-    }
-
-
-    processPost(request, response, callback) {
-        let queryData = '';
-
-        if (typeof callback != 'function') return null;
-
-        if(request.method == 'POST') {
-            request.on('data', (data) => {
-                queryData += data;
-
-                if (queryData.length > 1e6) {
-                    queryData = '';
-                    response.writeHead(413, {'Content-Type': 'text/plain'})
-                      .end();
-                    request.connection.destroy();
-                }
-            });
-
-            request.on('end', () => {
-                request.post = qs.parse(queryData);
-                this.login(request.post);
-
-                callback();
-            });
-        } else {
-            response.writeHead(405, {'Content-Type': 'text/plain'});
-            response.end();
+            let userCount = (await collection.find({email: email}).limit(1).count());
+            return userCount > 0;
+        } finally {
+            db.close();
         }
     }
-
 }
