@@ -1,9 +1,10 @@
 export default class User {
 
-    constructor(email, name, encryptedPassword) {
+    constructor(email, name, encryptedPassword, tasks = []) {
         this.email = email;
         this.name = name;
         this.encryptedPassword = encryptedPassword;
+        this.tasks = tasks;
     }
 
     get firstName() {
@@ -14,7 +15,8 @@ export default class User {
         return {
             name: this.name,
             email: this.email,
-            password: this.encryptedPassword
+            password: this.encryptedPassword,
+            tasks: this.tasks
         };
     }
 }

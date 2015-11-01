@@ -21,7 +21,9 @@ export default class ApplicationController {
             const path = routes.homePage.view;
             let view = fs.readFileSync(path, 'utf-8');
             let processedView = TemplateEngine(view, {
-                user_signed_in: signedIn
+                user_signed_in: signedIn,
+                email: globalUserData.userInfo.email,
+                tasks: globalUserData.userTasks
             });
             this.render(processedView);
         } else {

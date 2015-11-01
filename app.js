@@ -16,6 +16,8 @@ import { Logger as logger } from './helpers/utils';
 const port = 9000;
 let Logger = new logger();
 
+GLOBAL.globalUserData = {};
+
 http.createServer( (request, response) => {
 
     Logger.log(request.method, request.socket.remoteAddress, request.url);

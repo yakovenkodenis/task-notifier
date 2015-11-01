@@ -6,9 +6,19 @@
 </head>
 <body>
     <div class="container">
-        <h1>Home page</h1>
+        <h1>Hello, <% email %>! This is your home page</h1>
         <a href="/profile">Profile</a>
         <br>
+        <hr>
+        <% if (tasks && tasks.length > 0) { %>
+            <% for(task in tasks) { %>
+                <div class="task">
+                    <span><% tasks[task] %></span>
+                </div>
+            <% } %>
+        <% } else { %>
+            <h3>You don't have any tasks yet.</h3>
+        <% } %>
         <hr>
         <% if(user_signed_in) { %>
             <h3>to log out <a href="/logout">click here</a></h3>

@@ -43,11 +43,12 @@ export default class LoginController extends ApplicationController {
                 this.getLoginPage(formData);
             } else { // check for credentials in the db
                 let session = await this.login(formData);
+                if(!globalUserData.userInfo) {
+                    globalUserData.userInfo = formData;
+                }
+                let tasks = await this.getUserTasks(globalUserData.userInfo.email);
+                globalUserData.userTasks = tasks;
                 new MainController(this.request, this.response, session).getMainPage(302);
-                // this.response.writeHead(302,
-                //     { Location: (this.request.socket.encrypted ? 'https://' : 'http://')
-                //                 + this.request.headers.host + routes.mainPage.url });
-                // this.response.end();
             }
         });
     }
@@ -108,6 +109,22 @@ export default class LoginController extends ApplicationController {
                 { writeConcern: { w: "majority", wtimeout: 5000 }});
 
             return session;
+
+        } finally {
+            db.close();
+        }
+    }
+
+    async getUserTasks(email) {
+        let db = await MongoClient.connect('mongodb://127.0.0.1:27017/notificator');
+        try {
+            let users = db.collection('users');
+
+            let user = (await users.findOne({ email: email }));
+
+            console.log(user);
+
+            return user.tasks;
 
         } finally {
             db.close();
