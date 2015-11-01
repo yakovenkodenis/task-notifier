@@ -39,7 +39,11 @@ export default class SignupController extends ApplicationController {
                 this.getSignupPage(formData);
             } else { // check for credentials in the db
                 await this.registerNewUser(formData);
-                new LoginController(this.request, this.response).getLoginPage();
+                // new LoginController(this.request, this.response).getLoginPage();
+                this.response.writeHead(302,
+                    { Location: (this.request.socket.encrypted ? 'https://' : 'http://')
+                                + this.request.headers.host + routes.loginPage.url });
+                this.response.end();
             }
         });
     }

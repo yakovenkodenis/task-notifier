@@ -43,7 +43,11 @@ export default class LoginController extends ApplicationController {
                 this.getLoginPage(formData);
             } else { // check for credentials in the db
                 let session = await this.login(formData);
-                new MainController(this.request, this.response, session).getMainPage();
+                new MainController(this.request, this.response, session).getMainPage(302);
+                // this.response.writeHead(302,
+                //     { Location: (this.request.socket.encrypted ? 'https://' : 'http://')
+                //                 + this.request.headers.host + routes.mainPage.url });
+                // this.response.end();
             }
         });
     }
