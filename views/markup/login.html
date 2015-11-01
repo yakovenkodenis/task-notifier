@@ -5,6 +5,13 @@
 </head>
 <body>
     <h1>Login:</h1>
+    <% if(data && data["requestResult"] && typeof data["requestResult"] == "object") { %>
+        <div class="auth-error">
+            <% for(var e in data["requestResult"].error) { %>
+                <div><% data["requestResult"].error[e] %></div>
+            <% } %>
+        </div>
+    <% } %>
     <form method="post">
         <input type="email" placeholder="Your email..." name="email" value=<% (data && data.email) ? data.email : "" %> >
         <input type="password" placeholder="Your password..." name="password">
@@ -12,5 +19,6 @@
     </form>
     <br><hr><br>
     <a href="/">Home</a>
+    <a href="/signup">Sign Up</a>
 </body>
 </html>

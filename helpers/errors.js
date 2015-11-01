@@ -18,6 +18,9 @@ const nameValidationFail = 'Name is too short (4 symbols minimum)';
 
 const userExists = 'User with this email already exists!';
 
+const loginFail = 'Wrong email or password';
+
 export default { loginError, registerError, authErrorHeader, noNameField,
                  noEmailField, noPasswordField, emailValidationFail,
-                 passwordValidationFail, nameValidationFail, userExists }
+                 passwordValidationFail, nameValidationFail, userExists,
+                 loginFail }

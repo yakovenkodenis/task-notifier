@@ -3,13 +3,13 @@ import { format } from 'util';
 import qs from 'querystring';
 import fs from 'fs';
 
-import { Generator } from '../helpers/utils.js';
+import { Generator } from '../helpers/utils';
 import ApplicationController from './applicationController';
-import MainController from './mainController';
+import LoginController from './loginController';
 import TemplateEngine from '../helpers/templateEngine';
 import User from '../models/user';
 import routes from '../routes/routes';
-import errors from '../helpers/errors.js';
+import errors from '../helpers/errors';
 
 
 export default class SignupController extends ApplicationController {
@@ -39,7 +39,7 @@ export default class SignupController extends ApplicationController {
                 this.getSignupPage(formData);
             } else { // check for credentials in the db
                 await this.registerNewUser(formData);
-                new MainController(this.request, this.response).getMainPage();
+                new LoginController(this.request, this.response).getLoginPage();
             }
         });
     }

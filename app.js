@@ -7,6 +7,7 @@ import applicationController from './controllers/applicationController';
 import mainController from './controllers/mainController';
 import errorController from './controllers/errorController';
 import authController from './controllers/authController';
+import loginController from './controllers/loginController';
 import signupController from './controllers/signupController';
 import routes from './routes/routes';
 
@@ -24,6 +25,7 @@ http.createServer( (request, response) => {
     const MainController = new mainController(request, response);
     const ErrorController = new errorController(request, response);
     const AuthController = new authController(request, response);
+    const LoginController = new loginController(request, response);
     const SignupController = new signupController(request, response);
 
     switch (request.method) {
@@ -44,6 +46,14 @@ http.createServer( (request, response) => {
 
             else if (request.url === routes.signupPage.url) {
                 SignupController.getSignupPage();
+            }
+
+            else if (request.url === routes.loginPage.url) {
+                LoginController.getLoginPage();
+            }
+
+            else if (request.url === routes.logout.url) {
+                LoginController.destroySession();
             }
 
             // serve css files (views/styles folder)
@@ -71,11 +81,8 @@ http.createServer( (request, response) => {
             break;
 
         case 'POST':
-            if (request.url === '/login') {
-                AuthController.processPost(request, response, () => {
-                    response.writeHead(200, 'OK', {'Content-Type': 'text/plain'});
-                    response.end();
-                });
+            if (request.url === routes.loginPage.url) {
+                LoginController.attemptLogin();
             }
 
             else if (request.url === routes.signupPage.url) {

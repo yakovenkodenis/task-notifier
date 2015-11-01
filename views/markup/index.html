@@ -10,7 +10,11 @@
         <a href="/profile">Profile</a>
         <br>
         <hr>
-        <h3>to sign up <a href="/signup">click here</a>.</h3>
+        <% if(user_signed_in) { %>
+            <h3>to log out <a href="/logout">click here</a></h3>
+        <% } else { %>
+            <h3>to sign up <a href="/signup">click here</a>.</h3>
+        <% } %>
     </div>
 </body>
 </html>
