@@ -81,31 +81,11 @@ export default class ApplicationController {
         return false;
     }
 
-    processPost(request, response, callback) {
-        let queryData = '';
+    async addNewTask() {
+        // TODO add new task to db
+        console.log('handling new task creation...');
 
-        if (typeof callback != 'function') return null;
-
-        if(request.method == 'POST') {
-            request.on('data', (data) => {
-                queryData += data;
-
-                if (queryData.length > 1e6) {
-                    queryData = '';
-                    response.writeHead(413, {'Content-Type': 'text/plain'})
-                      .end();
-                    request.connection.destroy();
-                }
-            });
-
-            request.on('end', () => {
-                request.post = qs.parse(queryData);
-                callback();
-            });
-        } else {
-            response.writeHead(405, {'Content-Type': 'text/plain'});
-            response.end();
-        }
+        this.response.end();
     }
 
 }

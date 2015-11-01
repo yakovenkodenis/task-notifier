@@ -9,6 +9,15 @@
         <h1>Hello, <% email %>! This is your home page</h1>
         <a href="/profile">Profile</a>
         <br>
+        <h3>Create your task!</h3>
+        <div class="task-form">
+            <form method="post">
+                <input type="text" placeholder="Name of your task..." name="name">
+                <input type="date" name="dueDate">
+                <textarea placeholder="Description of your task..." rows="5" name="description"></textarea>
+                <input type="submit" value="Save">
+            </form>
+        </div>
         <hr>
         <% if (tasks && tasks.length > 0) { %>
             <% for(task in tasks) { %>

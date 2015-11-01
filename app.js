@@ -91,6 +91,10 @@ http.createServer( (request, response) => {
                 SignupController.attemptSignup();
             }
 
+            else if (request.url === routes.homePage.url) {
+                AppController.addNewTask();
+            }
+
             else {
                 ErrorController.get404Page();
             }
