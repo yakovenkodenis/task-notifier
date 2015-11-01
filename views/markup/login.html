@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login:</h1>
+    <form method="post">
+        <input type="email" placeholder="Your email..." name="email" value=<% (data && data.email) ? data.email : "" %> >
+        <input type="password" placeholder="Your password..." name="password">
+        <input type="submit" value="Login">
+    </form>
+    <br><hr><br>
+    <a href="/">Home</a>
+</body>
+</html>

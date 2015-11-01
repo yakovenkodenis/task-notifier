@@ -25,6 +25,11 @@ export default {
         view: 'views/markup/signup.html'
     },
 
+    loginPage: {
+        url: '/login',
+        view: 'views/markup/login.html'
+    },
+
     mongoDB: {
         url: 'mongodb://127.0.0.1:27017/notificator'
     }

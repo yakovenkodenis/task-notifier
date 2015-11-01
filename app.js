@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import http from 'http';
 import qs from 'querystring';
 
@@ -42,6 +44,24 @@ http.createServer( (request, response) => {
 
             else if (request.url === routes.signupPage.url) {
                 SignupController.getSignupPage();
+            }
+
+            // serve css files (views/styles folder)
+            else if (/[^\/[a-zA-Z0-9\/]*.css$/.test(request.url.toString())) {
+                (response, fileName, contentType) => {
+                    let cssPath = path.join(__dirname, 'views', fileName);
+                    fs.readFile(cssPath, (err, data) => {
+                        if (err) {
+                            console.warn('CSS load error:\n', err);
+                            response.writeHead(404);
+                            response.write('Not Found');
+                        } else {
+                            response.writeHead(200, {'Content-Type': contentType});
+                            response.write(data);
+                        }
+                        response.end();
+                    });
+                }(response, request.url.toString().substring(1), 'text/css');
             }
 
             else {

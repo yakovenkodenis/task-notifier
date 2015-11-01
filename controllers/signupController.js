@@ -35,12 +35,10 @@ export default class SignupController extends ApplicationController {
         this.request.on('end', async (data) => {
             let formData = qs.parse(reqBody);
             formData["requestResult"] = await this.validateUserInput(formData);
-            // console.log(formData);
             if (formData.requestResult.error) { // validations fails
                 this.getSignupPage(formData);
             } else { // check for credentials in the db
                 await this.registerNewUser(formData);
-                console.log('good to go');
                 new MainController(this.request, this.response).getMainPage();
             }
         });
@@ -59,7 +57,6 @@ export default class SignupController extends ApplicationController {
 
             let userCount = await collection.save(user.serialize,
                 { writeConcern: { w: "majority", wtimeout: 5000 }});
-            console.log("REGISTRATION\n", userCount);
             return userCount > 0;
         } finally {
             db.close();
@@ -70,20 +67,13 @@ export default class SignupController extends ApplicationController {
         if(!formData) return false;
 
         let validationErrors = await this.getValidationErrors(formData);
-        console.log("HGSADGSadg\n");
-        console.log(validationErrors);
+
         if(validationErrors) {
             return {
                 error: validationErrors.messages
             }
         }
         return true;
-    }
-
-    checkIfUserExists(formData) {
-        let name = formData.name;
-        let email = formData.email;
-        let password = new Generator().encodeMD5(formData.password);
     }
 
     async getValidationErrors(formData) {
@@ -112,7 +102,6 @@ export default class SignupController extends ApplicationController {
 
         let userExists = await this.userExistsInDB(formData.email);
         if(formData.email && userExists) {
-            console.log("USERRRR:\n", userExists);
             messages.push(`${errors.userExists}`);
         }
 
