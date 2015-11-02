@@ -20,7 +20,13 @@ const userExists = 'User with this email already exists!';
 
 const loginFail = 'Wrong email or password';
 
+const noTaskNameField = 'You must give a name to your task';
+
+const noTaskDateField = 'You must give a deadline to your task';
+
+const taskAlreadyExists = 'Task with the same name and deadline already exists';
+
 export default { loginError, registerError, authErrorHeader, noNameField,
                  noEmailField, noPasswordField, emailValidationFail,
                  passwordValidationFail, nameValidationFail, userExists,
-                 loginFail }
+                 loginFail, noTaskNameField, noTaskDateField, taskAlreadyExists }
