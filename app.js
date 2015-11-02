@@ -9,6 +9,7 @@ import errorController from './controllers/errorController';
 import authController from './controllers/authController';
 import loginController from './controllers/loginController';
 import signupController from './controllers/signupController';
+import taskController from './controllers/taskController';
 import routes from './routes/routes';
 
 import { Logger as logger } from './helpers/utils';
@@ -29,6 +30,7 @@ http.createServer( (request, response) => {
     const AuthController = new authController(request, response);
     const LoginController = new loginController(request, response);
     const SignupController = new signupController(request, response);
+    const TaskController = new taskController(request, response);
 
     switch (request.method) {
 
@@ -92,7 +94,7 @@ http.createServer( (request, response) => {
             }
 
             else if (request.url === routes.homePage.url) {
-                AppController.addNewTask();
+                TaskController.addNewTask();
             }
 
             else {

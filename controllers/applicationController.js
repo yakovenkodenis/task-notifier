@@ -13,7 +13,7 @@ export default class ApplicationController {
         this.session = session;
     }
 
-    async getHomePage() {
+    async getHomePage(taskData) {
 
         let signedIn = await this.userSignedIn();
 
@@ -23,7 +23,8 @@ export default class ApplicationController {
             let processedView = TemplateEngine(view, {
                 user_signed_in: signedIn,
                 email: globalUserData.userInfo.email,
-                tasks: globalUserData.userTasks
+                tasks: globalUserData.userTasks,
+                taskData: taskData
             });
             this.render(processedView);
         } else {
