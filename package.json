@@ -8,7 +8,8 @@
     "url": "https://github.com/yakovenkodenis/task-notifier.git"
   },
   "dependencies": {
-    "mongodb": "~2.0"
+    "mongodb": "~2.0",
+    "nodemailer": "^1.8.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
