@@ -10,11 +10,19 @@
         <a href="/profile">Profile</a>
         <br>
         <h3>Create your task!</h3>
+
+        <% if(taskData && taskData["requestResult"] && typeof taskData["requestResult"] == "object") { %>
+            <div class="auth-error">
+                <% for(var e in taskData["requestResult"].error) { %>
+                    <div><% taskData["requestResult"].error[e] %></div>
+                <% } %>
+            </div>
+        <% } %>
         <div class="task-form">
             <form method="post">
-                <input type="text" placeholder="Name of your task..." name="name">
-                <input type="date" name="dueDate">
-                <textarea placeholder="Description of your task..." rows="5" name="description"></textarea>
+                <input type="text" placeholder="Name of your task..." name="name" value="<% (taskData && taskData.name) ? taskData.name : "" %>">
+                <input type="date" name="dueDate" value="<% (taskData && taskData.deadline) ? taskData.deadline : "" %>">
+                <textarea placeholder="Description of your task..." rows="5" name="description"><% (taskData && taskData.description) ? taskData.description : "" %></textarea>
                 <input type="submit" value="Save">
             </form>
         </div>
@@ -22,7 +30,9 @@
         <% if (tasks && tasks.length > 0) { %>
             <% for(task in tasks) { %>
                 <div class="task">
-                    <span><% tasks[task] %></span>
+                    <h3><% tasks[task]['name'] %></h3>
+                    <span><% tasks[task]['deadline'] %></span>
+                    <p><% tasks[task]['description'] %></p>
                 </div>
             <% } %>
         <% } else { %>

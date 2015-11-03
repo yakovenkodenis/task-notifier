@@ -25,10 +25,14 @@ export default class TaskController extends ApplicationController {
         this.request.on('end', async (data) => {
             let taskData = qs.parse(reqBody);
             taskData["requestResult"] = await this.validateUserInput(taskData);
+            console.log("REQUEST RES\n", taskData);
             if (taskData.requestResult.error) { // validations fails
                 this.getHomePage(taskData);
             } else { // check for credentials in the db
-                await this.createNewTaskInDB(taskData);
+                console.log("Initiate task creation");
+                let tasksList = await this.createNewTaskInDB(taskData);
+                globalUserData.userTasks = tasksList;
+                console.log("TASKS_LIST:\n", globalUserData.userTasks);
                 this.response.writeHead(302,
                     { Location: (this.request.socket.encrypted ? 'https://' : 'http://')
                                 + this.request.headers.host + routes.homePage.url });
@@ -42,26 +46,35 @@ export default class TaskController extends ApplicationController {
         try {
             let collection = db.collection('users');
 
-            let id = (await collection.find({
+            let tasksList = (await collection.findOne({
                 email: globalUserData.userInfo.email
-            })).tasks.length + 1;
+            })).tasks;
+
+            let id = tasksList.length + 1;
+
+            console.log("ID\n", id);
 
             let name = taskData.name;
             let deadline = taskData.dueDate;
             let description = taskData.description;
 
             let task = new Task(id, deadline, name, description);
+            console.log(task.serialize);
 
             await collection.update(
                 { email: globalUserData.userInfo.email },
                 {
                     $push: {
-                        tasks: task
+                        tasks: task.serialize
                     }
                 });
 
+            tasksList.push(task.serialize);
+
             console.log("SUCCESS");
-        } finally {
+
+            return tasksList;
+        } catch(err) {console.log(err);}finally {
             db.close();
         }
     }
@@ -84,7 +97,9 @@ export default class TaskController extends ApplicationController {
             console.log("VALIDATE_USER_INPUT\n", taskData.name);
             let taskExists = await this.taskExistsInDB(taskData);
 
-            if(!userExists) {
+            console.log("VALIDATE INPUT\n", taskExists);
+
+            if(taskExists) {
                 messages.push(errors.taskAlreadyExists);
             }
         }
@@ -113,7 +128,7 @@ export default class TaskController extends ApplicationController {
                 }).limit(1).count());
             console.log('taskExistsInDB\n', userCount);
             return userCount > 0;
-        } finally {
+        } catch(err) {console.log(err);} finally {
             db.close();
         }
     }
