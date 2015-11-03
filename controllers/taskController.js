@@ -31,7 +31,9 @@ export default class TaskController extends ApplicationController {
             } else { // check for credentials in the db
                 console.log("Initiate task creation");
                 let tasksList = await this.createNewTaskInDB(taskData);
-                globalUserData.userTasks = tasksList;
+                globalUserData.userTasks = tasksList.sort((task1, task2) => {
+                    return new Date(task1['deadline']) - new Date(task2['deadline']);
+                });
                 console.log("TASKS_LIST:\n", globalUserData.userTasks);
                 this.response.writeHead(302,
                     { Location: (this.request.socket.encrypted ? 'https://' : 'http://')
