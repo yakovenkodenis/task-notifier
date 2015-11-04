@@ -2,14 +2,15 @@
 <html>
 <head>
     <title>Hello</title>
-    <link rel="stylesheet" src="styles/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./styles/main.css">
 </head>
 <body>
     <div class="container">
-        <h1>Hello, <% email %>! This is your home page</h1>
+        <h1 id="title">Hello, <% email %>! This is your home page</h1>
         <a href="/profile">Profile</a>
         <br>
-        <h3>Create your task!</h3>
+        <h3 class="new-task-label">Create your task!</h3>
 
         <% if(taskData && taskData["requestResult"] && typeof taskData["requestResult"] == "object") { %>
             <div class="auth-error">
@@ -18,12 +19,12 @@
                 <% } %>
             </div>
         <% } %>
-        <div class="task-form">
+        <div class="task-form" id="new-task">
             <form method="post">
                 <input type="text" placeholder="Name of your task..." name="name" value="<% (taskData && taskData.name) ? taskData.name : "" %>">
                 <input type="date" name="dueDate" value="<% (taskData && taskData.deadline) ? taskData.deadline : "" %>">
-                <textarea placeholder="Description of your task..." rows="5" name="description"><% (taskData && taskData.description) ? taskData.description : "" %></textarea>
-                <input type="submit" value="Save">
+                <textarea placeholder="Description of your task..." rows="3" name="description"><% (taskData && taskData.description) ? taskData.description : "" %></textarea>
+                <input type="submit" value="Save" class="submit">
             </form>
         </div>
         <hr>

@@ -19,6 +19,8 @@ let Logger = new logger();
 
 GLOBAL.globalUserData = {};
 
+try {
+
 http.createServer( (request, response) => {
 
     Logger.log(request.method, request.socket.remoteAddress, request.url);
@@ -35,8 +37,26 @@ http.createServer( (request, response) => {
     switch (request.method) {
 
         case 'GET':
+            // serve css files (views/styles folder)
+            if (/[^\/[a-zA-Z0-9\/]*.css$/.test(request.url.toString())) {
+                console.log("ASKED FORM STYLES");
+                (response, fileName, contentType) => {
+                    let cssPath = path.join(__dirname, 'views', fileName);
+                    fs.readFile(cssPath, (err, data) => {
+                        if (err) {
+                            console.warn('CSS load error:\n', err);
+                            response.writeHead(404);
+                            response.write('Not Found');
+                        } else {
+                            response.writeHead(200, {'Content-Type': contentType});
+                            response.write(data);
+                        }
+                        response.end();
+                    });
+                }(response, request.url.toString().substring(1), 'text/css');
+            }
 
-            if (request.url === routes.homePage.url || request.url === '/') {
+            else if (request.url === routes.homePage.url || request.url === '/') {
                 AppController.getHomePage();
             }
 
@@ -60,23 +80,6 @@ http.createServer( (request, response) => {
                 LoginController.destroySession();
             }
 
-            // serve css files (views/styles folder)
-            else if (/[^\/[a-zA-Z0-9\/]*.css$/.test(request.url.toString())) {
-                (response, fileName, contentType) => {
-                    let cssPath = path.join(__dirname, 'views', fileName);
-                    fs.readFile(cssPath, (err, data) => {
-                        if (err) {
-                            console.warn('CSS load error:\n', err);
-                            response.writeHead(404);
-                            response.write('Not Found');
-                        } else {
-                            response.writeHead(200, {'Content-Type': contentType});
-                            response.write(data);
-                        }
-                        response.end();
-                    });
-                }(response, request.url.toString().substring(1), 'text/css');
-            }
 
             else {
                 ErrorController.get404Page();
@@ -108,3 +111,5 @@ http.createServer( (request, response) => {
     }
 
 }).listen(port);
+
+} catch(err) {consle.log("SERVER:\n", err);}

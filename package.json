@@ -14,7 +14,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "babel-node": "babel-node --stage 0 --ignore='foo|bar|baz'",
-    "watch": "nodemon --exec npm run babel-node -- app.js"
+    "watch": "./env.sh | nodemon --exec npm run babel-node -- app.js"
   },
   "author": "Denis Yakovenko",
   "license": "MIT",

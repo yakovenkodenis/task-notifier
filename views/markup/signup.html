@@ -2,25 +2,28 @@
 <html>
 <head>
     <title>Sign Up</title>
-    <link rel="stylesheet" href="styles/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./styles/main.css">
 </head>
 <body>
-    <h1>Register:</h1>
-    <% if(data && data["requestResult"] && typeof data["requestResult"] == "object") { %>
-        <div class="auth-error">
-            <% for(var e in data["requestResult"].error) { %>
-                <div><% data["requestResult"].error[e] %></div>
-            <% } %>
-        </div>
-    <% } %>
-    <form method="post">
-        <input type="name" placeholder="Your name..." name="name" value=<% (data && data.name) ? data.name : "" %> >
-        <input type="email" placeholder="Your email..." name="email" value=<% (data && data.email) ? data.email : "" %> >
-        <input type="password" placeholder="Your password..." name="password">
-        <input type="submit" value="Register">
-    </form>
-    <br><hr><br>
-    <a href="/">Home</a>
-    <a href="/login">Login</a>
+    <div class="container">
+        <h1>Register:</h1>
+        <% if(data && data["requestResult"] && typeof data["requestResult"] == "object") { %>
+            <div class="auth-error">
+                <% for(var e in data["requestResult"].error) { %>
+                    <div><% data["requestResult"].error[e] %></div>
+                <% } %>
+            </div>
+        <% } %>
+        <form method="post">
+            <input type="name" placeholder="Your name..." name="name" value=<% (data && data.name) ? data.name : "" %> >
+            <input type="email" placeholder="Your email..." name="email" value=<% (data && data.email) ? data.email : "" %> >
+            <input type="password" placeholder="Your password..." name="password">
+            <input type="submit" value="Register">
+        </form>
+        <br><hr><br>
+        <a href="/">Home</a>
+        <a href="/login">Login</a>
+    </div>
 </body>
 </html>
