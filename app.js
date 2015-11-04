@@ -10,6 +10,7 @@ import authController from './controllers/authController';
 import loginController from './controllers/loginController';
 import signupController from './controllers/signupController';
 import taskController from './controllers/taskController';
+import EmailController from './controllers/emailController';
 import routes from './routes/routes';
 
 import { Logger as logger } from './helpers/utils';
@@ -22,6 +23,14 @@ GLOBAL.globalUserData = {};
 try {
 
 http.createServer( (request, response) => {
+
+    // EmailController.sendEmail({
+    //     from: 'Denis Yakovenko <yakovenko.denis.a@gmail.com>',
+    //     to: 'yo_krevedko@bk.ru',
+    //     subject: 'Testing emailing feature',
+    //     text: 'Hey there!',
+    //     html: '<h1>Hey there!</h1>'
+    // });
 
     Logger.log(request.method, request.socket.remoteAddress, request.url);
 
