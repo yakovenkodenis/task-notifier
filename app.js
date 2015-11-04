@@ -39,7 +39,6 @@ http.createServer( (request, response) => {
         case 'GET':
             // serve css files (views/styles folder)
             if (/[^\/[a-zA-Z0-9\/]*.css$/.test(request.url.toString())) {
-                console.log("ASKED FORM STYLES");
                 (response, fileName, contentType) => {
                     let cssPath = path.join(__dirname, 'views', fileName);
                     fs.readFile(cssPath, (err, data) => {
@@ -109,7 +108,6 @@ http.createServer( (request, response) => {
         //     break;
 
     }
-
 }).listen(port);
 
 } catch(err) {consle.log("SERVER:\n", err);}

@@ -42,11 +42,15 @@ export default class LoginController extends ApplicationController {
             if (formData.requestResult.error) { // validations fails
                 this.getLoginPage(formData);
             } else { // check for credentials in the db
-                let session = await this.login(formData);
                 if(!globalUserData.userInfo) {
                     globalUserData.userInfo = formData;
                 }
-                let tasks = await this.getUserTasks(globalUserData.userInfo.email);
+                let session = await this.login(formData);
+                let currentUser = await this.getUserTasks(globalUserData.userInfo.email);
+                if(!globalUserData.userInfo.name) {
+                    globalUserData.userInfo.name = currentUser.name.split(/\s/)[0];
+                }
+                let tasks = currentUser.tasks;
                 globalUserData.userTasks = tasks;
                 new MainController(this.request, this.response, session).getMainPage(302);
             }
@@ -63,15 +67,11 @@ export default class LoginController extends ApplicationController {
                 let Parser = new parser();
                 let cookie_sid = Parser.parseCookies(this.request)['session_id'];
 
-                console.log("COOKIE:\n", cookie_sid);
-
                 let sessionExists = (await sessions.find(
                     {
                         is_valid: true,
                         session_id: cookie_sid
                     }).limit(1).count()) > 0;
-
-                console.log("FOUND:\t", sessionExists);
 
                 if (sessionExists) {
                     await sessions.update(
@@ -89,7 +89,6 @@ export default class LoginController extends ApplicationController {
             } catch(err) {console.log(err)} finally {
                 new MainController(this.request, this.response).getHomePage();
                 db.close();
-                console.log('stop destroying session');
             }
         }
     }
@@ -122,11 +121,9 @@ export default class LoginController extends ApplicationController {
 
             let user = (await users.findOne({ email: email }));
 
-            console.log(user);
+            return user;
 
-            return user.tasks;
-
-        } finally {
+        } catch(err){console.log(err);}finally {
             db.close();
         }
     }
@@ -146,7 +143,6 @@ export default class LoginController extends ApplicationController {
         if (formData.password && formData.email &&
                 formData.password.length > 0 &&
                 formData.email.length > 0) {
-            console.log(formData.password);
             let userExists = await this.userExistsInDB(formData.email,
                                                        formData.password);
 

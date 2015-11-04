@@ -23,6 +23,7 @@ export default class ApplicationController {
             let processedView = TemplateEngine(view, {
                 user_signed_in: signedIn,
                 email: globalUserData.userInfo.email,
+                name: globalUserData.userInfo.name,
                 tasks: globalUserData.userTasks,
                 taskData: taskData
             });
@@ -68,7 +69,6 @@ export default class ApplicationController {
                 let Parser = new parser();
                 let session_id = cookie['session_id'];
 
-                console.log("COOKIE:\n", session_id);
                 let sessionExists = (await sessions.find(
                     {
                         is_valid: true,
@@ -81,12 +81,4 @@ export default class ApplicationController {
         }
         return false;
     }
-
-    async addNewTask() {
-        // TODO add new task to db
-        console.log('handling new task creation...');
-
-        this.response.end();
-    }
-
 }
