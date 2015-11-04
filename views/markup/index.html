@@ -9,6 +9,11 @@
     <div class="container">
         <h1 id="title">Hello, <% name %></h1>
         <a href="/profile">Profile</a>
+        <% if(user_signed_in) { %>
+            <h3>to log out <a href="/logout">click here</a></h3>
+        <% } else { %>
+            <h3>to sign up <a href="/signup">click here</a>.</h3>
+        <% } %>
         <br>
         <h3 class="new-task-label">Create your task!</h3>
 
@@ -21,30 +26,35 @@
         <% } %>
         <div class="task-form" id="new-task">
             <form method="post">
-                <input type="text" placeholder="Name of your task..." name="name" value="<% (taskData && taskData.name) ? taskData.name : "" %>">
-                <input type="date" name="dueDate" value="<% (taskData && taskData.deadline) ? taskData.deadline : "" %>">
+                <input type="text" placeholder="Name of your task..." name="name" value="<% (taskData && taskData.name) ? taskData.name : "" %>" class="form-input">
+                <input type="date" name="dueDate" value="<% (taskData && taskData.deadline) ? taskData.deadline : "" %>" class="form-input">
                 <textarea placeholder="Description of your task..." rows="3" name="description"><% (taskData && taskData.description) ? taskData.description : "" %></textarea>
                 <input type="submit" value="Save" class="submit">
             </form>
         </div>
-        <hr>
-        <% if (tasks && tasks.length > 0) { %>
-            <% for(task in tasks) { %>
-                <div class="task">
-                    <h3><% tasks[task]['name'] %></h3>
-                    <span><% tasks[task]['deadline'] %></span>
-                    <p><% tasks[task]['description'] %></p>
-                </div>
+        <br>
+        <div class="task-desk">
+            <% if (tasks && tasks.length > 0) { %>
+                <% for(task in tasks) { %>
+                    <div class="task">
+                        <h3><% tasks[task]['name'] %></h3>
+                        <% if (new Date(tasks[task]['deadline']) < new Date(new Date().toJSON().slice(0,10))) { %>
+                            <span class="pull-right error">
+                                <% tasks[task]['deadline'] %>
+                            </span>
+                        <% } else { %>
+                            <span class="pull-right">
+                                <% tasks[task]['deadline'] %>
+                            </span>
+                        <% } %>
+                        <p class="truncate"><% tasks[task]['description'] %></p>
+                    </div>
+                <% } %>
+            <% } else { %>
+                <h3>You don't have any tasks yet.</h3>
             <% } %>
-        <% } else { %>
-            <h3>You don't have any tasks yet.</h3>
-        <% } %>
+        </div>
         <hr>
-        <% if(user_signed_in) { %>
-            <h3>to log out <a href="/logout">click here</a></h3>
-        <% } else { %>
-            <h3>to sign up <a href="/signup">click here</a>.</h3>
-        <% } %>
     </div>
 </body>
 </html>

@@ -14,11 +14,13 @@
             <% } %>
         </div>
     <% } %>
-    <form method="post">
-        <input type="email" placeholder="Your email..." name="email" value=<% (data && data.email) ? data.email : "" %> >
-        <input type="password" placeholder="Your password..." name="password">
-        <input type="submit" value="Login">
-    </form>
+    <div class="task-form" id="new-task">
+        <form method="post">
+            <input type="email" placeholder="Your email..." name="email" value=<% (data && data.email) ? data.email : "" %> >
+            <input type="password" placeholder="Your password..." name="password">
+            <input type="submit" value="Login" class="submit">
+        </form>
+    </div>
     <br><hr><br>
     <a href="/">Home</a>
     <a href="/signup">Sign Up</a>
