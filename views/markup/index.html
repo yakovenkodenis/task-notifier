@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hello</title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello</title>
     <link rel="stylesheet" href="./styles/main.css">
 </head>
 <body>
     <div class="container">
         <h1 id="title">Hello, <% name %></h1>
-        <a href="/profile">Profile</a>
-        <% if(user_signed_in) { %>
-            <h3>to log out <a href="/logout">click here</a></h3>
-        <% } else { %>
-            <h3>to sign up <a href="/signup">click here</a>.</h3>
-        <% } %>
+        <div class="nav">
+            <a href="/profile">Profile</a>
+            <% if(user_signed_in) { %>
+                <a href="/logout">Log Out</a>
+            <% } else { %>
+                <a href="/signup">Sign Up</a>
+            <% } %>
+        </div>
         <br>
         <h3 class="new-task-label">Create your task!</h3>
 
