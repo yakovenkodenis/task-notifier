@@ -36,8 +36,8 @@
         <div class="task-desk">
             <% if (tasks && tasks.length > 0) { %>
                 <% for(task in tasks) { %>
-                    <div class="task">
-                        <h3><% tasks[task]['name'] %></h3>
+                    <div class="task truncate" id="modal-trigger">
+                        <h3 class="truncate-header"><% tasks[task]['name'] %></h3>
                         <% if (new Date(tasks[task]['deadline']) < new Date(new Date().toJSON().slice(0,10))) { %>
                             <span class="pull-right error">
                                 <% tasks[task]['deadline'] %>

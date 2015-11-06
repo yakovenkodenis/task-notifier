@@ -64,6 +64,24 @@ http.createServer( (request, response) => {
                 }(response, request.url.toString().substring(1), 'text/css');
             }
 
+            // serve js files (views/js folder)
+            else if (/[^\/[a-zA-Z0-9\/]*.js$/.test(request.url.toString())) {
+                (response, fileName, contentType) => {
+                    let cssPath = path.join(__dirname, 'views', fileName);
+                    fs.readFile(cssPath, (err, data) => {
+                        if (err) {
+                            console.warn('JS load error:\n', err);
+                            response.writeHead(404);
+                            response.write('Not Found');
+                        } else {
+                            response.writeHead(200, {'Content-Type': contentType});
+                            response.write(data);
+                        }
+                        response.end();
+                    });
+                }(response, request.url.toString().substring(1), 'text/javascript');
+            }
+
             else if (request.url === routes.homePage.url || request.url === '/') {
                 AppController.getHomePage();
             }
