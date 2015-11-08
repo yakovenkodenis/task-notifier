@@ -131,13 +131,13 @@ http.createServer( (request, response) => {
                 PasswordRestorationController.attemptSendRestorationInstructions();
             }
 
+            else if (request.url.indexOf(routes.changePassPage.url) > -1) {
+                PasswordRestorationController.attemptChangePassword();
+            }
+
             else {
                 ErrorController.get404Page();
             }
-
-        // default:
-        //     ErrorController.get405Page();
-        //     break;
 
     }
 }).listen(port);

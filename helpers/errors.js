@@ -28,8 +28,12 @@ const taskAlreadyExists = 'Task with the same name and deadline already exists';
 
 const userDoesNotExist = 'User with such email does not exist';
 
+const noPasswordConfirmationField = 'Password confirmation is required';
+
+const passwordsDontMatch = 'Passwords do not match';
+
 export default { loginError, registerError, authErrorHeader, noNameField,
                  noEmailField, noPasswordField, emailValidationFail,
                  passwordValidationFail, nameValidationFail, userExists,
                  loginFail, noTaskNameField, noTaskDateField, taskAlreadyExists,
-                 userDoesNotExist }
+                 userDoesNotExist, noPasswordConfirmationField, passwordsDontMatch }
