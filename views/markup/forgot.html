@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forgot your password?</title>
+    <link rel="stylesheet" href="./styles/main.css">
+</head>
+<body>
+    <% if (data && data['requestResult'] === 'success') { %>
+        <h2>Restoration instructions have been sent!</h2>
+    <% } else { %>
+        <h1>Forgot your password?</h1>
+        <br>
+        <h4>Get password restoration instructions:</h4>
+        <br>
+        <% if(data && data["requestResult"] && typeof data["requestResult"] == "object") { %>
+            <div class="auth-error">
+                <% for(var e in data["requestResult"].error) { %>
+                    <div><% data["requestResult"].error[e] %></div>
+                <% } %>
+            </div>
+        <% } %>
+        <div class="task-form" id="new-task">
+            <form method="post">
+                <input type="email" placeholder="Your email..." name="email" value=<% (data && data.email) ? data.email : "" %> >
+                <input type="submit" value="Send instructions" class="submit">
+            </form>
+        </div>
+    <% } %>
+    <br><hr><br>
+    <a href="/">Home</a>
+    <a href="/signup">Sign Up</a>
+</body>
+</html>

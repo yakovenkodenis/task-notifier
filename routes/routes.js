@@ -30,6 +30,16 @@ export default {
         view: 'views/markup/login.html'
     },
 
+    forgotPassPage: {
+        url: '/forgot',
+        view: 'views/markup/forgot.html'
+    },
+
+    changePassPage: {
+        url: '/change-password',
+        view: 'views/markup/new_password.html'
+    },
+
     logout: {
         url: '/logout',
         view: null

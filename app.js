@@ -4,13 +4,13 @@ import http from 'http';
 import qs from 'querystring';
 
 import applicationController from './controllers/applicationController';
+import passwordRestorationController from './controllers/passRestorationController';
 import mainController from './controllers/mainController';
 import errorController from './controllers/errorController';
 import authController from './controllers/authController';
 import loginController from './controllers/loginController';
 import signupController from './controllers/signupController';
 import taskController from './controllers/taskController';
-import EmailController from './controllers/emailController';
 import routes from './routes/routes';
 
 import { Logger as logger } from './helpers/utils';
@@ -24,18 +24,12 @@ try {
 
 http.createServer( (request, response) => {
 
-    // EmailController.sendEmail({
-    //     from: 'Denis Yakovenko <yakovenko.denis.a@gmail.com>',
-    //     to: 'yo_krevedko@bk.ru',
-    //     subject: 'Testing emailing feature',
-    //     text: 'Hey there!',
-    //     html: '<h1>Hey there!</h1>'
-    // });
-
     Logger.log(request.method, request.socket.remoteAddress, request.url);
 
     // Initialize controllers
     const AppController = new applicationController(request, response);
+    const PasswordRestorationController =
+        new passwordRestorationController(request, response);
     const MainController = new mainController(request, response);
     const ErrorController = new errorController(request, response);
     const AuthController = new authController(request, response);
@@ -106,6 +100,9 @@ http.createServer( (request, response) => {
                 LoginController.destroySession();
             }
 
+            else if (request.url === routes.forgotPassPage.url) {
+                PasswordRestorationController.getForgotPassPage();
+            }
 
             else {
                 ErrorController.get404Page();
@@ -124,6 +121,10 @@ http.createServer( (request, response) => {
 
             else if (request.url === routes.homePage.url) {
                 TaskController.addNewTask();
+            }
+
+            else if (request.url === routes.forgotPassPage.url) {
+                PasswordRestorationController.attemptSendRestorationInstructions();
             }
 
             else {

@@ -1,3 +1,4 @@
+
 class Logger {
     log(...options) {
         console.log(...options);
@@ -17,6 +18,15 @@ class Generator {
             return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
         });
         return uuid;
+    }
+
+    generateRestorationLink(url) {
+        console.log("GENERATOR:\n", url);
+        const uuid = this.generateUUID();
+        return {
+            link: `${url}?restore=${uuid}`,
+            uuid
+        }
     }
 }
 
