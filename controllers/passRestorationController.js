@@ -24,6 +24,17 @@ export default class PasswordRestorationController extends ApplicationController
         this.render(processedView);
     }
 
+    getChangePassPage() {
+        const path = routes.changePassPage.view;
+        let query = require('url').parse(this.request.url, true).query;
+
+        console.log(query);
+
+        let view = fs.readFileSync(path, 'utf-8');
+        let processedView = TemplateEngine(view, {data: undefined});
+        this.render(processedView);
+    }
+
     attemptSendRestorationInstructions() {
         let reqBody = '';
         this.request.on('data', (data) => {

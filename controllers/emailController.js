@@ -25,7 +25,7 @@ export default class EmailController {
     static composePassRestorationMessage(data) {
         return {
             html: `<h3>Hi, ${data.name}!</h3><br>To restore your password ` +
-                  `click <a href="http://${data.link}?" target="_blank">this link</a>` +
+                  `click <a href="http://${data.link}" target="_blank">this link</a>` +
                   `<br>This link will be invalid in 8 hours.<br><br><p>` +
                   `If you didn't initiate the password ` +
                   `restoration just ignore this email</p>`,

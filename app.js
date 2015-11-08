@@ -104,6 +104,10 @@ http.createServer( (request, response) => {
                 PasswordRestorationController.getForgotPassPage();
             }
 
+            else if (request.url.indexOf(routes.changePassPage.url) > -1) {
+                PasswordRestorationController.getChangePassPage();
+            }
+
             else {
                 ErrorController.get404Page();
             }
