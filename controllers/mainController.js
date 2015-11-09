@@ -7,12 +7,15 @@ import TemplateEngine from '../helpers/templateEngine';
 
 export default class MainController extends ApplicationController {
 
-    getMainPage(statusCode = 200) {
+    getMainPage(formData = null, statusCode = 200) {
+        console.log("SDAG");
         const path = routes.mainPage.view;
         let view = fs.readFileSync(path, 'utf-8');
         let processedView = TemplateEngine(view,
             {
-                n: ['hi', 'hello', 'hey']
+                n: ['hi', 'hello', 'hey'],
+                data: formData,
+                time: globalUserData.userInfo.notification_time
             });
         this.render(processedView, statusCode);
     }

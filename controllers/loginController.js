@@ -51,6 +51,7 @@ export default class LoginController extends ApplicationController {
                     globalUserData.userInfo.name = currentUser.name.split(/\s/)[0];
                 // }
                 let tasks = currentUser.tasks;
+                globalUserData.userInfo['notification_time'] = currentUser.notification_time;
                 globalUserData.userTasks = tasks;
                 new MainController(this.request, this.response, session).getMainPage(302);
             }
@@ -157,6 +158,20 @@ export default class LoginController extends ApplicationController {
             }
         }
         return true;
+    }
+
+    async getNotificationTime(email) {
+        let db = await MongoClient.connect('mongodb://127.0.0.1:27017/notificator');
+        try {
+            let users = db.collection('users');
+
+            let user = (await users.findOne({ email }));
+
+            return user.notification_time;
+
+        } catch(err){console.log(err);}finally {
+            db.close();
+        }
     }
 
     async userExistsInDB(email, encryptedPassword) {

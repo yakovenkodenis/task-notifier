@@ -32,8 +32,13 @@ const noPasswordConfirmationField = 'Password confirmation is required';
 
 const passwordsDontMatch = 'Passwords do not match';
 
+const noTimeField = 'You should fill in the time field';
+
+const timeValidationFail = 'Invalid time format provided';
+
 export default { loginError, registerError, authErrorHeader, noNameField,
                  noEmailField, noPasswordField, emailValidationFail,
                  passwordValidationFail, nameValidationFail, userExists,
                  loginFail, noTaskNameField, noTaskDateField, taskAlreadyExists,
-                 userDoesNotExist, noPasswordConfirmationField, passwordsDontMatch }
+                 userDoesNotExist, noPasswordConfirmationField, passwordsDontMatch,
+                 noTimeField, timeValidationFail }

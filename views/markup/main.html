@@ -12,10 +12,24 @@
     <br>
     <h4>Notification Settings:</h4>
     <br>
-    <p>For now you receive your email notifications every day at 17:00.<br>You can always change it if you wish.</p><br>
+    <% if (time) { %>
+    <p>For now you receive your email notifications every day at <% time %>.<br>You can always change it if you wish.</p>
+    <% } else { %>
+        <p>You should set up the preferred notification time for you below:</p>
+    <% } %>
+    <br>
     <form method="post">
         <h5>At what time you would like to receive email notifications?</h5>
-        <input type="time" name="time">
+        <% if(data && data['requestResult'] && typeof data["requestResult"] == "object") { %>
+            <div class="auth-error">
+                <% for(var e in data["requestResult"].error) { %>
+                    <div><% data["requestResult"].error[e] %></div>
+                <% } %>
+            </div>
+        <% } else if (data && data['requestResult'] && data['requestResult'] === 'success') { %>
+            <h6>Notification time updated successfully</h6>
+        <% } else {} %>
+        <input type="text" name="time" value=<% time ? time : '' %>>
         <input type="submit" value="Save" class="submit">
     </form>
 </body>

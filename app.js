@@ -10,6 +10,7 @@ import errorController from './controllers/errorController';
 import authController from './controllers/authController';
 import loginController from './controllers/loginController';
 import signupController from './controllers/signupController';
+import scheduleController from './controllers/scheduleController';
 import taskController from './controllers/taskController';
 import routes from './routes/routes';
 
@@ -35,6 +36,7 @@ http.createServer( (request, response) => {
     const AuthController = new authController(request, response);
     const LoginController = new loginController(request, response);
     const SignupController = new signupController(request, response);
+    const ScheduleController = new scheduleController(request, response);
     const TaskController = new taskController(request, response);
 
     switch (request.method) {
@@ -133,6 +135,10 @@ http.createServer( (request, response) => {
 
             else if (request.url.indexOf(routes.changePassPage.url) > -1) {
                 PasswordRestorationController.attemptChangePassword();
+            }
+
+            else if (request.url === routes.mainPage.url) {
+                ScheduleController.handleNotificationTimeUpdate();
             }
 
             else {
