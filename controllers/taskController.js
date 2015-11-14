@@ -6,6 +6,7 @@ import fs from 'fs';
 import Task from '../models/task';
 import routes from '../routes/routes';
 import errors from '../helpers/errors';
+import EmailController from './emailController';
 import ApplicationController from './applicationController';
 
 
@@ -34,6 +35,7 @@ export default class TaskController extends ApplicationController {
                 globalUserData.userTasks = tasksList.sort((task1, task2) => {
                     return new Date(task1['deadline']) - new Date(task2['deadline']);
                 });
+                await this.subscribeForEmailNotifications(taskData);
                 this.response.writeHead(302,
                     { Location: (this.request.socket.encrypted ? 'https://' : 'http://')
                                 + this.request.headers.host + routes.homePage.url });
@@ -77,6 +79,56 @@ export default class TaskController extends ApplicationController {
             return tasksList;
         } catch(err) {console.log(err);}finally {
             db.close();
+        }
+    }
+
+
+    async subscribeForEmailNotifications(taskData) {
+        let date = taskData['dueDate'];
+        let time = '00:00:00';
+
+        let email = globalUserData.userInfo.email;
+
+        let db = await MongoClient.connect('mongodb://127.0.0.1:27017/notificator');
+        try {
+            let users = db.collection('users');
+
+            let user = (await users.findOne({ email }));
+
+            time = user.notification_time;
+
+        } catch(err){console.log(err);}finally {
+            db.close();
+        }
+
+        time = time ? time : '00:00:00';
+
+        console.log("DELIVERY DATE:\n", date);
+        console.log("DELIVERY TIME:\n", time);
+
+        let emailObject = this.composeNotificationEmail(taskData);
+        EmailController.sendEmailOnSpecificTime(
+            {
+                from: 'Denis Yakovenko <yakovenko.denis.a@gmail.com>',
+                to: email,
+                subject: emailObject.subject,
+                text: emailObject.text,
+                html: emailObject.html
+            },
+            date,
+            time
+        );
+    }
+
+    composeNotificationEmail(taskData) {
+        return {
+            subject: `${taskData['name']} deadline is approaching | notification by TaskNotifier`,
+            text: `Hey there!\nThe deadline to your task '${taskData['name']}' ` +
+                   "is coming today.\nHere's the description of the task:\n" +
+                   `${taskData['description']}\n\nAll the best,\nTaskNotifier team`,
+            html: `<h3>Hey there!</h3><br><p>The deadline to your task '${taskData['name']}' ` +
+                  `is coming today.<br><br>Here's the description of the task:<br>` +
+                  `${taskData['description']}</p><br><br>All the best,<br>TaskNotifier team`
         }
     }
 

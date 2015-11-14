@@ -116,6 +116,7 @@ http.createServer( (request, response) => {
 
             break;
 
+
         case 'POST':
             if (request.url === routes.loginPage.url) {
                 LoginController.attemptLogin();

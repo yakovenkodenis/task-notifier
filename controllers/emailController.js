@@ -22,6 +22,29 @@ export default class EmailController {
         });
     }
 
+    static sendEmailOnSpecificTime(mailOptions, date, time) {
+
+      const dateTime = new Date(`${date} ${time}`);
+      const now = new Date();
+
+      console.log('NOW:\n', now);
+      console.log('DELIVERY_TIME:\n', dateTime);
+
+      let timeOffsetMillis = dateTime.getTime() - now.getTime();
+
+      // console.log(`Email will be delivered on date ${dateTime}`);
+      setTimeout(() => {
+        (() => {
+          if (dateTime >= now) {
+            console.log('The notification email has been sent!');
+            this.sendEmail(mailOptions);
+          } else {
+            console.log('The date has already passed');
+          }
+        })();
+      }, timeOffsetMillis);
+    }
+
     static composePassRestorationMessage(data) {
         return {
             html: `<h3>Hi, ${data.name}!</h3><br>To restore your password ` +
