@@ -42,14 +42,13 @@ export default class LoginController extends ApplicationController {
             if (formData.requestResult.error) { // validations fails
                 this.getLoginPage(formData);
             } else { // check for credentials in the db
-                // if(!globalUserData.userInfo) {
-                    globalUserData.userInfo = formData;
-                // }
+                globalUserData.userInfo = formData;
+
                 let session = await this.login(formData);
                 let currentUser = await this.getUserTasks(globalUserData.userInfo.email);
-                // if(!globalUserData.userInfo.name) {
-                    globalUserData.userInfo.name = currentUser.name.split(/\s/)[0];
-                // }
+
+                globalUserData.userInfo.name = currentUser.name.split(/\s/)[0];
+
                 let tasks = currentUser.tasks;
                 globalUserData.userInfo['notification_time'] = currentUser.notification_time;
                 globalUserData.userTasks = tasks;

@@ -40,7 +40,7 @@ export default class ScheduleController extends MainController {
                 await this.updatePreferedNotificationTime(formData.time,
                     globalUserData.userInfo.email);
                 console.log("AFTER TIME\n");
-                globalUserData.userInfo.notificationTime = formData.time;
+                globalUserData.userInfo.notification_time = formData.time;
                 formData['requestResult'] = 'success';
                 await this.getMainPage(formData);
             }
