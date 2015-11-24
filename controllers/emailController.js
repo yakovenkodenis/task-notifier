@@ -32,7 +32,6 @@ export default class EmailController {
 
       let timeOffsetMillis = dateTime.getTime() - now.getTime();
 
-      // console.log(`Email will be delivered on date ${dateTime}`);
       setTimeout(() => {
         (() => {
           if (dateTime >= now) {

@@ -1,10 +1,14 @@
+@import 'rupture'
 
 .task-desk
     width 107%
-    margin-left auto
+    margin-left 0 !important
     margin-right auto
     padding-left 10px
     padding-right 10px
+
+    +tablet()
+        margin-left 5em !important
 
 .error
     color #e74c3c
@@ -33,6 +37,9 @@
         display inline-block
         float right
         margin-top -20%
+
+.new-task-label
+    width 100%
 
 .smaller
     display inline
