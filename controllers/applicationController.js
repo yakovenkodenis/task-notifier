@@ -33,16 +33,33 @@ export default class ApplicationController {
         }
     }
 
-    render(page, statusCode = 200) {
+    render(page, statusCode = 200, location = undefined) {
         if (this.session) {
-            this.response.writeHead(statusCode,
-                {
-                    'Set-Cookie': this.session.cookie,
-                    'Content-Type': 'text/html'
-                });
+            if(statusCode == 302 && location) {
+                this.response.writeHead(statusCode,
+                    {
+                        'Set-Cookie': this.session.cookie,
+                        'Content-Type': 'text/html',
+                        'Location': location
+                    });
+            } else {
+                this.response.writeHead(statusCode,
+                    {
+                        'Set-Cookie': this.session.cookie,
+                        'Content-Type': 'text/html'
+                    });
+            }
         } else {
+            if(statusCode == 302 && location) {
+                this.response.writeHead(statusCode,
+                    {
+                        'Content-Type': 'text/html',
+                        'Location': location
+                    });
+            }
             this.response.writeHead(statusCode, { 'Content-Type': 'text/html' });
         }
+
         this.response.write(page);
         this.response.end();
     }

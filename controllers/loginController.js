@@ -53,7 +53,7 @@ export default class LoginController extends ApplicationController {
                 let tasks = currentUser.tasks;
                 globalUserData.userInfo['notification_time'] = currentUser.notification_time;
                 globalUserData.userTasks = tasks;
-                new MainController(this.request, this.response, session).getMainPage(302);
+                new MainController(this.request, this.response, session).getMainPage(null, 302);
             }
         });
     }
