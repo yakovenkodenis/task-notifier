@@ -5,11 +5,11 @@ let Logger = new logger();
 
 if(cluster.isMaster) {
 
-    Logger.log('Muster cluster is up and running');
+    Logger.log('Master cluster is up and running');
 
     const cpuCount = require('os').cpus().length;
 
-    for (let i = 0; i < cpuCount; ++i) {
+    for (let i = 0; i < cpuCount - 1; ++i) {
         cluster.fork();
     }
 
@@ -19,5 +19,5 @@ if(cluster.isMaster) {
 } else {
     require('./app');
 
-    Logger.log('Slave cluster is up and running');
+    Logger.log('Slave cluster is up and running', process.pid);
 }
